@@ -1,6 +1,6 @@
 package main
 
-import "gorge/cmd/service1/routers"
+import "github.com/xujintao/gorge/cmd/service1/routers"
 
 func main() {
 
