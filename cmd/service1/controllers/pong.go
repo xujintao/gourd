@@ -11,21 +11,21 @@ func Pong(ctx *gin.Context) {
 	// 获取appid
 	v1, ok := ctx.Get("appid")
 	if !ok {
-		log.Fatal("appid not exist")
+		log.Panic("appid not exist")
 	}
-	appID, ok := v1.(string)
+	appID, ok := v1.(int)
 	if !ok {
-		log.Fatal("appid is not string", appID)
+		log.Panic("appid is not int", appID)
 	}
 
 	// 获取usercode
 	v2, ok := ctx.Get("usercode")
 	if !ok {
-		log.Fatal("usercode not exist")
+		log.Panic("usercode not exist")
 	}
 	userCode, ok := v2.(string)
 	if !ok {
-		log.Fatal("usercode is not string", userCode)
+		log.Panic("usercode is not string", userCode)
 	}
 
 	ctx.JSON(200, gin.H{
