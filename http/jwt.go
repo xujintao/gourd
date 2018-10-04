@@ -1,4 +1,4 @@
-package auth
+package http
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ import (
 // MyClaims 自定义Claims
 type MyClaims struct {
 	*jwt.StandardClaims
-	AppID    int    `json:"appid,omitempty"`
-	UserCode string `json:"usercode,omitempty"`
+	AppID int    `json:"appid"`
+	UID   string `json:"uid"`
 }
 
 // JwtAuthMiddleware JWT认证中间件
@@ -36,7 +36,7 @@ func JwtAuthMiddleware(key string) gin.HandlerFunc {
 		if claims, ok := token.Claims.(*MyClaims); ok && token.Valid && claims.Valid() == nil {
 			// if claims.Valid() != nil {
 			ctx.Set("appid", claims.AppID)
-			ctx.Set("usercode", claims.UserCode)
+			ctx.Set("uid", claims.UID)
 			ctx.Next()
 			return
 		}
