@@ -1,4 +1,4 @@
-package model
+package config
 
 import (
 	"log"
@@ -6,6 +6,10 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
+
+func init() {
+	Parse("/etc/gorge/config", &Config)
+}
 
 // config 全部配置
 type config struct {
@@ -26,10 +30,6 @@ type config struct {
 
 // Config 配置单例
 var Config config
-
-func init() {
-	Parse("/etc/gorge/config", &Config)
-}
 
 // Parse 配置解析
 func Parse(path string, model interface{}) {

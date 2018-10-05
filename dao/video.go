@@ -6,6 +6,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql" //
 	"github.com/jmoiron/sqlx"
+	"github.com/xujintao/gorge/config"
 	"github.com/xujintao/gorge/model"
 )
 
@@ -14,12 +15,12 @@ var DB *sqlx.DB
 
 func init() {
 	var err error
-	DB, err = sqlx.Connect("mysql", model.Config.DB.DSN)
+	DB, err = sqlx.Connect("mysql", config.Config.DB.DSN)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	DB.SetMaxOpenConns(model.Config.DB.MaxConn)
+	DB.SetMaxOpenConns(config.Config.DB.MaxConn)
 
 	go func() {
 		if err := DB.Ping(); err != nil {
