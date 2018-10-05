@@ -4,40 +4,11 @@ import (
 	"database/sql"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql" //
-	"github.com/jmoiron/sqlx"
-	"github.com/xujintao/gorge/config"
 	"github.com/xujintao/gorge/model"
 )
 
-// DB 抽象sqlx
-var DB *sqlx.DB
-
-func init() {
-	var err error
-	DB, err = sqlx.Connect("mysql", config.Config.DB.DSN)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	DB.SetMaxOpenConns(config.Config.DB.MaxConn)
-
-	go func() {
-		if err := DB.Ping(); err != nil {
-			log.Fatalln(err)
-		}
-		log.Println("db connected.")
-		// 可以在这里建表
-	}()
-}
-
 // NewVideo 上传视频
-func NewVideo(project *model.Video) (int, error) {
-	// 写库
-	var SQLInsertVideo = `
-INSERT INTO video (videoName, linkURL, des, ownerID, ownerName) 
-VALUES (:videoName, :linkURL, :des, :ownerID, :ownerName)`
-
+func NewVideo(video *model.Video) (int, error) {
 	// 开始事务
 	tx, err := DB.Beginx()
 	if err != nil {
@@ -45,7 +16,11 @@ VALUES (:videoName, :linkURL, :des, :ownerID, :ownerName)`
 		log.Panic(err)
 	}
 
-	res, err := tx.NamedExec(SQLInsertVideo, project)
+	// 写库
+	var SQLInsertVideo = `
+		INSERT INTO video (videoName, linkURL, des, ownerID, ownerName) 
+		VALUES (:videoName, :linkURL, :des, :ownerID, :ownerName)`
+	res, err := tx.NamedExec(SQLInsertVideo, video)
 	if err != nil {
 		tx.Rollback()
 		log.Panic(err)
@@ -55,14 +30,14 @@ VALUES (:videoName, :linkURL, :des, :ownerID, :ownerName)`
 		tx.Rollback()
 		log.Panic(err)
 	}
-	project.ID = int(lastID)
+	video.ID = int(lastID)
 
 	// 事务提交
 	if err := tx.Commit(); err != nil {
 		tx.Rollback()
 		log.Panic(err)
 	}
-	return project.ID, nil
+	return video.ID, nil
 }
 
 // GetVideos 获取所有视频
@@ -94,5 +69,6 @@ func GetVideo(vid string) (*model.Video, error) {
 			log.Panic(err)
 		}
 	}
+
 	return video, nil
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xujintao/gorge/dao"
 	"github.com/xujintao/gorge/model"
+	"github.com/xujintao/gorge/service"
 )
 
 // NewVideo 上传视频
@@ -19,7 +19,7 @@ func NewVideo(c *gin.Context) {
 		return
 	}
 
-	vid, err := dao.NewVideo(video)
+	vid, err := service.NewVideo(video)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"code":    10102,
@@ -43,7 +43,7 @@ func GetVideos(c *gin.Context) {
 	uid, _ := v.(string)
 
 	// 调用
-	Videos, err := dao.GetVideos(uid)
+	videos, err := service.GetVideos(uid)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"code":    10201,
@@ -55,7 +55,7 @@ func GetVideos(c *gin.Context) {
 	// 成功返回
 	c.JSON(200, gin.H{
 		"code": 200,
-		"data": Videos,
+		"data": videos,
 	})
 }
 
@@ -66,7 +66,7 @@ func GetVideo(c *gin.Context) {
 	vid := c.Param("vid")
 
 	// 调用
-	video, err := dao.GetVideo(vid)
+	video, err := service.GetVideo(vid)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"code":    10201,
