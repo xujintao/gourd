@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/xujintao/gorge/apps/tpl/conf"
+	"github.com/xujintao/gourd/apps/tpl/conf"
 )
 
 // SetupRouter 设置路由

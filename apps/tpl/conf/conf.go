@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	Parse("/etc/gorge/config", &Config)
+	Parse("/etc/gourd/config", &Config)
 }
 
 // config 全部配置

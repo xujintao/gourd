@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/xujintao/gorge/apps/tpl/dao/db/sqls"
-	"github.com/xujintao/gorge/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/dao/db/sqls"
 )
 
 func (db *db) GetFeedList(user *model.User) ([]*model.Feed, error) {
@@ -35,6 +35,6 @@ func (db *db) GetFeedListLatest(user *model.User) ([]*model.Feed, error) {
 	return data, nil
 }
 
-func (db *db)GetRepoList(user *model.User) ([]*model.Repo, error){
-	return nil,nil
+func (db *db) GetRepoList(user *model.User) ([]*model.Repo, error) {
+	return nil, nil
 }

@@ -3,8 +3,8 @@ package service
 import (
 	"log"
 
-	"github.com/xujintao/gorge/apps/tpl/dao"
-	"github.com/xujintao/gorge/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/dao"
 )
 
 // User current user

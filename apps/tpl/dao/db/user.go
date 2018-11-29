@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/xujintao/gorge/apps/tpl/dao/db/sqls"
-	"github.com/xujintao/gorge/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/model"
+	"github.com/xujintao/gourd/apps/tpl/dao/db/sqls"
 )
 
 func (db *db) GetUserByID(id int64) (*model.User, error) {

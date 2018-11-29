@@ -5,8 +5,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql" //
 	"github.com/jmoiron/sqlx"
-	"github.com/xujintao/gorge/apps/tpl/dao"
-	"github.com/xujintao/gorge/apps/tpl/dao/db/ddls"
+	"github.com/xujintao/gourd/apps/tpl/dao/db/ddls"
+	"github.com/xujintao/gourd/apps/tpl/dao"
 )
 
 type db struct {

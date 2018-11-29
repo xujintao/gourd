@@ -1,6 +1,6 @@
 package dao
 
-import "github.com/xujintao/gorge/apps/tpl/model"
+import "github.com/xujintao/gourd/apps/tpl/model"
 
 // Dao interface
 type Dao interface {
