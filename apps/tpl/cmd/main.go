@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/xujintao/gorge/apps/video/http"
+	"github.com/xujintao/gorge/apps/tpl/http"
 )
 
 func main() {
