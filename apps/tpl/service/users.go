@@ -5,8 +5,8 @@ import (
 	"log"
 
 	// "github.com/gorilla/securecookie"
-	"github.com/xujintao/gourd/apps/tpl/model"
 	"github.com/xujintao/gourd/apps/tpl/dao"
+	"github.com/xujintao/gourd/apps/tpl/model"
 )
 
 // Users user list service
@@ -25,7 +25,7 @@ func (u *users) GetUserList() ([]*model.User, error) {
 	return users, nil
 }
 
-// GetUser get the user by id
+// GetUser get the user by user name
 func (u *users) GetUser(userName string) (*model.User, error) {
 	user, err := u.dao.GetUserByName(userName)
 	if err != nil {
