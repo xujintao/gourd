@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	UserToken    = "user"
 	SessionToken = "session"
 )
 
@@ -17,6 +18,34 @@ type MyClaims struct {
 	*jwt.StandardClaims
 	Kind     string
 	UserName string `json:"user_name"`
+}
+
+// New create MyClaims instance
+func New(kind, userName string) *MyClaims {
+	return &MyClaims{
+		StandardClaims: &jwt.StandardClaims{},
+		Kind:           kind,
+		UserName:       userName,
+	}
+}
+
+// Sign signs the token using the given secret hash
+// and returns the string value.
+func (t *MyClaims) Sign(secret string) (string, error) {
+	return t.SignExpires(secret, 0)
+}
+
+// SignExpires signs the token using the given secret hash
+// with an expiration date.
+func (t *MyClaims) SignExpires(secret string, exp int64) (string, error) {
+	t.ExpiresAt = exp
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, t)
+	raw, err := token.SignedString([]byte(secret))
+	if err != nil {
+		log.Println(err)
+		return "", fmt.Errorf("sign failed")
+	}
+	return raw, nil
 }
 
 // SecretFunc short type
