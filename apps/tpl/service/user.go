@@ -3,13 +3,24 @@ package service
 import (
 	"log"
 
-	"github.com/xujintao/gourd/apps/tpl/model"
 	"github.com/xujintao/gourd/apps/tpl/dao"
+	"github.com/xujintao/gourd/apps/tpl/lib/token"
+	"github.com/xujintao/gourd/apps/tpl/model"
 )
 
 // User current user
 type user struct {
 	dao dao.Dao
+}
+
+func (u *user) GetUserToken(user *model.User) (string, error) {
+	claims := token.New(token.UserToken, user.Name)
+	raw, err := claims.Sign(user.Hash)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+	return raw, nil
 }
 
 // GetFeedList get feed list
