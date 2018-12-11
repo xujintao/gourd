@@ -3,6 +3,7 @@ package conf
 import (
 	"log"
 
+	"gitee.com/ha666/golibs"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -10,6 +11,11 @@ import (
 func init() {
 	Parse("/etc/gourd/config", &Config)
 }
+
+const (
+	_key = "?GQ$0K0GgLdO=f+~L68PLm$uhKr4'=tV"
+	_iv  = "VFs7@sK61cj^f?HZ"
+)
 
 // config 全部配置
 type config struct {
@@ -43,18 +49,39 @@ func Parse(path string, model interface{}) {
 		log.Fatal(err)
 	}
 
-	err := viper.Unmarshal(model)
-	if err != nil {
+	if err := parseConfig(model); err != nil {
 		log.Fatal(err)
 	}
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(event fsnotify.Event) {
 		if event.Op == fsnotify.Write {
-			err := viper.Unmarshal(model)
-			if err != nil {
+			if err := parseConfig(model); err != nil {
 				log.Fatal(err)
 			}
 		}
 	})
+}
+
+func parseConfig(model interface{}) error {
+	err := viper.Unmarshal(model)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	decode := func(str *string) {
+		if *str == "" {
+			return
+		}
+		var tmpBytes []byte
+		log.Printf("%s,%s,%s", *str, _key, _iv)
+		tmpBytes, err = golibs.AesDecrypt(golibs.HexStringToBytes(*str), []byte(_key), []byte(_iv))
+		if err != nil {
+			return
+		}
+		*str = string(tmpBytes)
+	}
+
+	decode(&Config.DB.DSN)
+	return nil
 }

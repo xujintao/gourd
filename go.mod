@@ -1,6 +1,7 @@
 module github.com/xujintao/gourd
 
 require (
+	gitee.com/ha666/golibs v0.0.0-20181128072842-a7746c8fddb1
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fsnotify/fsnotify v1.4.7
