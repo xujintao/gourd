@@ -1,31 +1,34 @@
 package conf
 
 import (
+	"fmt"
 	"log"
+	"sync"
 
 	"gitee.com/ha666/golibs"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
 
-func init() {
-	Parse("/etc/gourd/config", &Config)
-}
-
 const (
 	_key = "?GQ$0K0GgLdO=f+~L68PLm$uhKr4'=tV"
 	_iv  = "VFs7@sK61cj^f?HZ"
 )
 
+func init() {
+	Parse("/etc/gourd/config")
+}
+
 // config 全部配置
 type config struct {
-	// Auth 认证配置
-	Auth struct {
-		JWT struct {
-			Secret string `mapstructure:"secret"`
-			AppID  int    `mapstructure:"appid"`
-		} `mapstructure:"jwt"`
-	} `mapstructure:"auth"`
+	// DNS 认证配置
+	DNS struct {
+		ID      string   `mapstructure:"id"`
+		Token   string   `mapstructure:"token"`
+		Domain  string   `mapstructure:"domain"`
+		KeyWord string   `mapstructure:"keyword"`
+		Names   []string `mapstructure:"names"`
+	} `mapstructure:"dnspod"`
 
 	// MySQL mysql配置
 	DB struct {
@@ -35,10 +38,38 @@ type config struct {
 }
 
 // Config 配置单例
-var Config config
+var (
+	Config config
+	// hot update need lock
+	mu sync.RWMutex
+)
+
+func (c *config) Set(cp *config) {
+	mu.Lock()
+	defer mu.Unlock()
+	*c = *cp
+}
+
+func (c *config) GetDNSID() string {
+	mu.RLock()
+	defer mu.RUnlock()
+	return c.DNS.ID
+}
+
+func (c *config) GetDBDSN() string {
+	mu.RLock()
+	defer mu.RUnlock()
+	return c.DB.DSN
+}
+
+func (c *config) GetDBMaxConn() int {
+	mu.RLock()
+	defer mu.RUnlock()
+	return c.DB.MaxConn
+}
 
 // Parse 配置解析
-func Parse(path string, model interface{}) {
+func Parse(path string) {
 	viper.SetConfigFile("config.yaml")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("./config")
@@ -49,39 +80,47 @@ func Parse(path string, model interface{}) {
 		log.Fatal(err)
 	}
 
-	if err := parseConfig(model); err != nil {
+	if err := parseConfig(); err != nil {
 		log.Fatal(err)
 	}
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(event fsnotify.Event) {
 		if event.Op == fsnotify.Write {
-			if err := parseConfig(model); err != nil {
-				log.Fatal(err)
+			if err := parseConfig(); err != nil {
+				log.Printf("hot update failed, %s, use last config", err.Error())
 			}
 		}
 	})
 }
 
-func parseConfig(model interface{}) error {
-	err := viper.Unmarshal(model)
+func parseConfig() error {
+	var c config
+	err := viper.Unmarshal(&c)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return fmt.Errorf("viper unmarshal failed")
 	}
 
-	decode := func(str *string) {
+	decode := func(str *string) error {
 		if *str == "" {
-			return
+			return fmt.Errorf("decode field is empty string")
 		}
 		var tmpBytes []byte
 		log.Printf("%s,%s,%s", *str, _key, _iv)
 		tmpBytes, err = golibs.AesDecrypt(golibs.HexStringToBytes(*str), []byte(_key), []byte(_iv))
 		if err != nil {
-			return
+			log.Println(err)
+			return fmt.Errorf("AES Decrypt failed")
 		}
 		*str = string(tmpBytes)
+		return nil
 	}
 
-	decode(&Config.DB.DSN)
+	if err := decode(&c.DB.DSN); err != nil {
+		return err
+	}
+
+	Config.Set(&c)
 	return nil
 }
