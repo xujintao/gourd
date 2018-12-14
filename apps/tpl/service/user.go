@@ -52,12 +52,7 @@ func (u *user) GetFeedList(userName string, latest bool) ([]*model.Feed, error) 
 }
 
 // GetRepoList get repo list
-func (u *user) GetRepoList(userName string, all, flush bool) ([]*model.Repo, error) {
-	user, err := u.dao.GetUserByName(userName)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
+func (u *user) GetRepoList(user *model.User, all, flush bool) ([]*model.Repo, error) {
 
 	// sync here
 

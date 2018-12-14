@@ -2,6 +2,7 @@ package http
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xujintao/gourd/apps/tpl/http/middleware/session"
@@ -27,10 +28,26 @@ func GetUserToken(c *gin.Context) {
 	c.String(200, raw)
 }
 
+// SyncRepoList synchronize lated repository from gitlab
 func SyncRepoList(c *gin.Context) {
 
 }
 
+// GetRepoList get user related repo list
 func GetRepoList(c *gin.Context) {
+	var (
+		user     = session.GetUser(c)
+		all, _   = strconv.ParseBool(c.Query("all"))
+		flush, _ = strconv.ParseBool(c.Query("flush"))
+	)
 
+	repos, err := service.User.GetRepoList(user, all, flush)
+	if err != nil {
+		log.Println(err)
+		c.JSON(200, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, repos)
 }
