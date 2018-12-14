@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 
+	gitlab "github.com/xanzy/go-gitlab"
 	"github.com/xujintao/gourd/apps/tpl/dao"
 	"github.com/xujintao/gourd/apps/tpl/lib/token"
 	"github.com/xujintao/gourd/apps/tpl/model"
@@ -10,7 +11,8 @@ import (
 
 // User current user
 type user struct {
-	dao dao.Dao
+	db           dao.DB
+	gitlibClient *gitlab.Client
 }
 
 func (u *user) GetUserToken(user *model.User) (string, error) {
@@ -25,7 +27,7 @@ func (u *user) GetUserToken(user *model.User) (string, error) {
 
 // GetFeedList get feed list
 func (u *user) GetFeedList(userName string, latest bool) ([]*model.Feed, error) {
-	user, err := u.dao.GetUserByName(userName)
+	user, err := u.db.GetUserByName(userName)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -34,7 +36,7 @@ func (u *user) GetFeedList(userName string, latest bool) ([]*model.Feed, error) 
 	// sync here
 
 	if latest {
-		feeds, err := u.dao.GetFeedListLatest(user)
+		feeds, err := u.db.GetFeedListLatest(user)
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -42,7 +44,7 @@ func (u *user) GetFeedList(userName string, latest bool) ([]*model.Feed, error) 
 		return feeds, nil
 	}
 
-	feeds, err := u.dao.GetFeedList(user)
+	feeds, err := u.db.GetFeedList(user)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -56,7 +58,7 @@ func (u *user) GetRepoList(user *model.User, all, flush bool) ([]*model.Repo, er
 
 	// sync here
 
-	repos, err := u.dao.GetRepoList(user)
+	repos, err := u.db.GetRepoList(user)
 	if err != nil {
 		log.Println(err)
 		return nil, err

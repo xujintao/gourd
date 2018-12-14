@@ -2,8 +2,12 @@ package dao
 
 import "github.com/xujintao/gourd/apps/tpl/model"
 
-// Dao interface
-type Dao interface {
+// Cache interface
+type Cache interface {
+}
+
+// DB interface
+type DB interface {
 	// GetUser gets a user by unique ID.
 	GetUserByID(int64) (*model.User, error)
 

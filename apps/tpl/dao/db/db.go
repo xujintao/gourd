@@ -5,8 +5,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql" //
 	"github.com/jmoiron/sqlx"
-	"github.com/xujintao/gourd/apps/tpl/dao/db/ddls"
 	"github.com/xujintao/gourd/apps/tpl/dao"
+	"github.com/xujintao/gourd/apps/tpl/dao/db/ddls"
 )
 
 type db struct {
@@ -15,7 +15,7 @@ type db struct {
 
 // New creates a database connection for the given driver and datasource
 // and returns a new Store.
-func New(dsn string, maxConn int) dao.Dao {
+func New(dsn string, maxConn int) dao.DB {
 	return &db{
 		DB: open(dsn, maxConn),
 	}

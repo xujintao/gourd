@@ -1,10 +1,18 @@
-# 认证
-auth:
-  jwt:
-    secret: "hello"
-    appid: 13
+dnspod:
+  id: 75458
+  token: bac311a08f16e89068b3aa4921a23c9591de553dcffcd0d29ea2595953fd67d9
+  domain: pi.com
+  keyword: xtr
+  names:
+  - xtr-bj
+  - xtr01
+  - xtr
+
+gitlab:
+  api_base_url: http://10.51.13.36/api/v4
+  access_token: bac311a08f16e89068b3aa4921a23c9591de553dcffcd0d29ea2595953fd67d9
 
 db:
   # 原文格式 ：user:password@tcp(ip:port)/database?charset=utf8mb4&parseTime=True&loc=Local&timeout=10s
-  dsn: "root:1234@tcp(127.0.0.1:3306)/gourd?charset=utf8mb4&parseTime=True&loc=Local&timeout=10s" 
+  dsn: f1ddb142608ad7f77db418994c1028c1504c6e665ac615f5ffd4bf3819407dbb7f995b22f495429949be23ec1c2c649a8fee5e79b8f7a4686d80596ae1b839d2abdd37318f21cf738acf761a34bb4b7f649b6b0f015dc17267c6f596c5769529
   maxConn: 10

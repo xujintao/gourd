@@ -11,12 +11,12 @@ import (
 
 // Users user list service
 type users struct {
-	dao dao.Dao
+	db dao.DB
 }
 
 // GetUserList get user list
 func (u *users) GetUserList() ([]*model.User, error) {
-	users, err := u.dao.GetUserList()
+	users, err := u.db.GetUserList()
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -27,7 +27,7 @@ func (u *users) GetUserList() ([]*model.User, error) {
 
 // GetUser get the user by user name
 func (u *users) GetUser(userName string) (*model.User, error) {
-	user, err := u.dao.GetUserByName(userName)
+	user, err := u.db.GetUserByName(userName)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -38,14 +38,14 @@ func (u *users) GetUser(userName string) (*model.User, error) {
 
 // UpdateUser update user
 func (u *users) UpdateUser(userName string, in *model.User) (*model.User, error) {
-	user, err := u.dao.GetUserByName(userName)
+	user, err := u.db.GetUserByName(userName)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
 	user.Active = in.Active
-	if err := u.dao.UpdateUser(user); err != nil {
+	if err := u.db.UpdateUser(user); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (u *users) CreateUser(in *model.User) (*model.User, error) {
 		return nil, fmt.Errorf("user validate failed")
 	}
 
-	if err := u.dao.CreateUser(user); err != nil {
+	if err := u.db.CreateUser(user); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -78,13 +78,13 @@ func (u *users) CreateUser(in *model.User) (*model.User, error) {
 
 // DeleteUser delete a user
 func (u *users) DeleteUser(userName string) error {
-	user, err := u.dao.GetUserByName(userName)
+	user, err := u.db.GetUserByName(userName)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	if err := u.dao.DeleteUser(user); err != nil {
+	if err := u.db.DeleteUser(user); err != nil {
 		log.Println(err)
 		return err
 	}

@@ -30,6 +30,12 @@ type config struct {
 		Names   []string `mapstructure:"names"`
 	} `mapstructure:"dnspod"`
 
+	// Gitlab 配置
+	Gitlab struct {
+		BaseURL     string `mapstructure:"base_url"`
+		AccessToken string `mapstructure:"access_token"`
+	} `mapstructure:"gitlab"`
+
 	// MySQL mysql配置
 	DB struct {
 		DSN     string `mapstructure:"dsn"`
@@ -54,6 +60,18 @@ func (c *config) GetDNSID() string {
 	mu.RLock()
 	defer mu.RUnlock()
 	return c.DNS.ID
+}
+
+func (c *config) GetGitlabBaseURL() string {
+	mu.RLock()
+	defer mu.RUnlock()
+	return c.Gitlab.BaseURL
+}
+
+func (c *config) GetGitlabToken() string {
+	mu.RLock()
+	defer mu.RUnlock()
+	return c.Gitlab.AccessToken
 }
 
 func (c *config) GetDBDSN() string {
