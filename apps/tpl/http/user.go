@@ -9,8 +9,8 @@ import (
 	"github.com/xujintao/gourd/apps/tpl/service"
 )
 
-// GetUser get user info
-func GetUser(c *gin.Context) {
+// GetSelf get user info
+func GetSelf(c *gin.Context) {
 	c.JSON(200, session.GetUser(c))
 }
 

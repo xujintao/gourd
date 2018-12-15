@@ -1,10 +1,10 @@
 package service
 
 import (
-	"fmt"
+	"encoding/base32"
 	"log"
 
-	// "github.com/gorilla/securecookie"
+	"github.com/gorilla/securecookie"
 	"github.com/xujintao/gourd/apps/tpl/dao"
 	"github.com/xujintao/gourd/apps/tpl/model"
 )
@@ -59,13 +59,9 @@ func (u *users) CreateUser(in *model.User) (*model.User, error) {
 		Name:   in.Name,
 		Email:  in.Email,
 		Avatar: in.Avatar,
-		// Hash: base32.StdEncoding.EncodeToString(
-		// 	securecookie.GenerateRandomKey(32),
-		// ),
-	}
-	if err := user.Validate(); err != nil {
-		log.Println(err)
-		return nil, fmt.Errorf("user validate failed")
+		Hash: base32.StdEncoding.EncodeToString(
+			securecookie.GenerateRandomKey(32),
+		),
 	}
 
 	if err := u.db.CreateUser(user); err != nil {

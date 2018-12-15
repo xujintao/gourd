@@ -64,13 +64,28 @@ func SetUser() gin.HandlerFunc {
 
 // MustUser must be user
 func MustUser() gin.HandlerFunc {
-
 	return func(c *gin.Context) {
 		user := GetUser(c)
-		if user == nil {
+		switch {
+		case user == nil:
 			c.AbortWithStatus(401)
+		default:
+			c.Next()
 		}
+	}
+}
 
-		c.Next()
+// MustAdmin must be Admin
+func MustAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user := GetUser(c)
+		switch {
+		case user == nil:
+			c.AbortWithStatus(401)
+		case user.Admin == false:
+			c.AbortWithStatus(403)
+		default:
+			c.Next()
+		}
 	}
 }

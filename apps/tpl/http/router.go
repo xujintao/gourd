@@ -14,11 +14,21 @@ func SetupRouter() *gin.Engine {
 	// user
 	user := e.Group("/api/user", session.MustUser())
 	{
-		user.GET("", GetUser)
+		user.GET("", GetSelf)
 		user.GET("/token", GetUserToken)
 
 		user.POST("/repos", SyncRepoList)
 		user.GET("/repos", GetRepoList)
+	}
+
+	// users
+	users := e.Group("/api/users", session.MustAdmin())
+	{
+		users.GET("", GetUserList)
+		users.GET("/:name", GetUser)
+		users.POST("", CreateUser)
+		users.PUT("/:name", UpdateUser)
+		users.DELETE("/:name", DeleteUser)
 	}
 
 	// repo
