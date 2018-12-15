@@ -12,6 +12,7 @@ import (
 var (
 	User  *user
 	Users *users
+	Repo  *repo
 )
 
 func init() {
@@ -31,4 +32,5 @@ func init() {
 	// 初始化各业务实例
 	User = &user{db, gitlabClient}
 	Users = &users{db}
+	Repo = &repo{db, gitlabClient}
 }

@@ -29,8 +29,14 @@ type DB interface {
 	// DeleteUser deletes a user account.
 	DeleteUser(*model.User) error
 
+	// GetRepo gets a repo by unique ID.
+	GetRepoByID(int) (*model.Repo, error)
+
+	// GetRepoName gets a repo by its full name.
+	GetRepoByName(string) (*model.Repo, error)
+
 	GetFeedList(*model.User) ([]*model.Feed, error)
 	GetFeedListLatest(*model.User) ([]*model.Feed, error)
 
-	GetRepoList(*model.User) ([]*model.Repo, error)
+	GetRepoList(*model.User) ([]model.Repo, error)
 }

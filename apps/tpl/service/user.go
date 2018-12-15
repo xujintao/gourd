@@ -54,7 +54,7 @@ func (u *user) GetFeedList(userName string, latest bool) ([]*model.Feed, error) 
 }
 
 // GetRepoList get repo list
-func (u *user) GetRepoList(user *model.User, all, flush bool) ([]*model.Repo, error) {
+func (u *user) GetRepoList(user *model.User, all, flush bool) ([]model.Repo, error) {
 
 	// sync here
 
@@ -68,7 +68,7 @@ func (u *user) GetRepoList(user *model.User, all, flush bool) ([]*model.Repo, er
 		return repos, nil
 	}
 
-	active := []*model.Repo{}
+	active := []model.Repo{}
 	for _, repo := range repos {
 		if repo.IsActive {
 			active = append(active, repo)

@@ -34,6 +34,8 @@ var index = map[string]string{
 	"registry-find-repo-addr":     registryFindRepoAddr,
 	"registry-delete-repo":        registryDeleteRepo,
 	"registry-delete":             registryDelete,
+	"repo-find-id":                repoFindByID,
+	"repo-find-name":              repoFindByName,
 	"repo-update-counter":         repoUpdateCounter,
 	"repo-find-user":              repoFindUser,
 	"repo-insert-ignore":          repoInsertIgnore,
@@ -410,6 +412,20 @@ DELETE FROM registry WHERE registry_repo_id = ?
 
 var registryDelete = `
 DELETE FROM registry WHERE registry_id = ?
+`
+
+var repoFindByID = `
+SELECT *
+FROM repos
+WHERE repo_id = ?
+LIMIT 1
+`
+
+var repoFindByName = `
+SELECT *
+FROM repos
+WHERE repo_full_name = ?
+LIMIT 1
 `
 
 var repoUpdateCounter = `

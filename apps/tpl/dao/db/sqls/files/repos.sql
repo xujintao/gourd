@@ -65,3 +65,17 @@ INSERT IGNORE INTO repos (
 -- name: repo-delete
 
 DELETE FROM repos WHERE repo_id = ?
+
+-- name: repo-find-id
+
+SELECT *
+FROM repos
+WHERE repo_id = ?
+LIMIT 1
+
+-- name: repo-find-id
+
+SELECT *
+FROM repos
+WHERE repo_full_name = ?
+LIMIT 1
